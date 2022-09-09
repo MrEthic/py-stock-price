@@ -12,6 +12,6 @@ RUN apt-get update && apt-get install -y \
 
 RUN git clone https://github.com/MrEthic/py-stock-price.git .
 
-RUN pip3 install -r src/requirements.txt
+RUN pip3 install -r requirements.txt
 
 ENTRYPOINT ["streamlit", "run", "src/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
