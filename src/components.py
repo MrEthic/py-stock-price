@@ -1,7 +1,7 @@
 import streamlit as st
 
 from utils import ColorIterator
-from vizualization import get_candlestick_plot
+from vizualization import get_candlestick_plot, get_hmm_states_plot
 from indicators import ma
 
 
@@ -18,20 +18,49 @@ def candles_price_chart():
     )
 
 
-def sidebar(tickers):
-    st.sidebar.selectbox(
-        label='Select Polygon ticker...',
-        options=tickers.keys(),
-        index=list(tickers.keys()).index('BTC'),
-        key='selected_crypto_name'
+def hmm_modeling_chart():
+    st.plotly_chart(
+        get_hmm_states_plot(
+            st.session_state.data,
+            st.session_state.modeling_symbol,
+            st.session_state.hmm_states,
+            st.session_state.hmm_Z
+        ),
+        use_container_width=True,
+        height=600
     )
 
-    st.sidebar.selectbox(
-        label='Select timespan...',
-        options=['Hourly', 'Daily'],
+
+def hmm_container():
+    pass
+
+
+def sidebar(tickers):
+    datasource = st.sidebar.radio(
+        "Data source",
+        ('Polygon API',),
         index=0,
-        key='timespan'
+        key='datasource'
     )
+
+    if datasource == 'Polygon API':
+
+        st.sidebar.selectbox(
+            label='Select Polygon ticker...',
+            options=tickers.keys(),
+            index=list(tickers.keys()).index('BTC'),
+            key='selected_crypto_name'
+        )
+
+        st.sidebar.selectbox(
+            label='Select timespan...',
+            options=['Hourly', 'Daily'],
+            index=0,
+            key='timespan'
+        )
+
+    elif datasource == 'Binance (local)':
+        st.session_state.selected_crypto_name = 'BTC'
 
 
 def chart_options_expander():
