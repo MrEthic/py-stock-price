@@ -4,7 +4,7 @@ import pandas as pd
 import requests
 import json
 from datetime import date, timedelta
-import streamlit as st
+from streamlit import experimental_memo
 
 
 BASE_ENDPOINT = 'https://api.polygon.io'
@@ -20,7 +20,7 @@ def get_polygon_apikey() -> str:
     return f"&apiKey={getenv('POLYGON_API_KEY')}"
 
 
-@st.cache
+@experimental_memo
 def get_polygon_tickers() -> dict:
     endpoint = f"{BASE_ENDPOINT}/v3/reference/tickers?market=crypto&limit=1000{get_polygon_apikey()}"
     tickers_raw = requests.get(url=endpoint).json()
@@ -45,7 +45,7 @@ def build_polygon_endpoint(crypto_ticker, timespan):
     return endpoint
 
 
-@st.experimental_memo
+@experimental_memo
 def get_ticker_candles(crypto_ticker, timespan, as_df=True) -> pd.DataFrame:
     """
     Get historical data of crypto ticker
@@ -61,4 +61,10 @@ def get_ticker_candles(crypto_ticker, timespan, as_df=True) -> pd.DataFrame:
 
     if data is None or crypto_ticker is None:
         raise Exception('Data fetch from polygon is null')
-    return pd.DataFrame(data) if as_df else data
+
+    if as_df:
+        df = pd.DataFrame(data)
+        df.set_index(pd.DatetimeIndex(df["t"]), inplace=True)
+        return df
+    else:
+        return data
