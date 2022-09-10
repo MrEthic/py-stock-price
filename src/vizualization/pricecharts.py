@@ -1,10 +1,9 @@
-import plotly.io as pio
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 
 
-def get_candlestick_plot(df: pd.DataFrame, ticker: str):
+def get_candlestick_plot(df: pd.DataFrame, ticker: str, colors, *args):
 
     df['t'] = pd.to_datetime(df['t'], unit='ms')
 
@@ -24,11 +23,36 @@ def get_candlestick_plot(df: pd.DataFrame, ticker: str):
             high=df['h'],
             low=df['l'],
             close=df['c'],
-            name='Price'
+            name='Price',
+            increasing_fillcolor='#089981',
+            increasing_line_color='#089981',
+            decreasing_fillcolor='#F23645',
+            decreasing_line_color='#F23645',
+            increasing_line_width=1,
+            decreasing_line_width=1
         ),
         row=1,
-        col=1,
+        col=1
     )
+
+    # https://plotly.com/python/reference/#scatter-line-dash
+    for indicator in args:
+        c = colors.get_indicator_color(indicator)
+        fig.add_trace(
+            go.Scatter(
+                x=df['t'],
+                y=df[indicator],
+                name=indicator,
+                line=dict(
+                    color=c,
+                    shape='linear',
+                    width=1
+                ),
+                mode='lines'
+            ),
+            row=1,
+            col=1
+        )
 
     fig.add_trace(
         go.Bar(x=df['t'], y=df['v'], name='Volume'),
@@ -40,9 +64,13 @@ def get_candlestick_plot(df: pd.DataFrame, ticker: str):
     fig['layout']['yaxis']['title'] = 'Price'
     fig['layout']['yaxis2']['title'] = 'Volume'
 
+    fig['layout']['yaxis']['gridcolor'] = '#2E323D'
+    fig['layout']['xaxis']['gridcolor'] = '#2E323D'
+    fig['layout']['yaxis2']['gridcolor'] = '#2E323D'
+    fig['layout']['xaxis2']['gridcolor'] = '#2E323D'
+
     fig.update_xaxes(
-        rangebreaks=[{'bounds': ['sat', 'mon']}],
-        rangeslider_visible=False,
+        rangeslider_visible=False
     )
 
     fig.update_layout(height=600)
