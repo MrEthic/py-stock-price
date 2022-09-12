@@ -32,10 +32,11 @@ def predict_page():
         results = list(zip(
             rows['open_time'],
             rows['open'],
+            rows['high'],
             rows['close'],
             st.session_state.predict.predictions
         ))
-        df = pd.DataFrame(results, columns=['open_date', 'open', 'close', 'sell_at'])
+        df = pd.DataFrame(results, columns=['open_date', 'open', 'high', 'close', 'sell_at'])
         csv = df.to_csv(index=False)
         b64 = base64.b64encode(csv.encode()).decode()
         st.markdown(f'<a href="data:file/csv;base64,{b64}" download="tmp/predictions.csv">Download csv file</a>', unsafe_allow_html=True)
