@@ -3,7 +3,7 @@ from plotly.subplots import make_subplots
 import pandas as pd
 
 
-def get_candlestick_plot(df: pd.DataFrame, ticker: str, colors, *args):
+def candlestick_plot(df: pd.DataFrame, ticker: str, colors, *args):
 
     df['t'] = pd.to_datetime(df['t'], unit='ms')
 

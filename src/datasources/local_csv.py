@@ -10,6 +10,5 @@ def load_local(symbol):
     else:
         raise FileNotFoundError
 
-    df.set_index(pd.DatetimeIndex(df["open_time"]), inplace=True)
     df.drop(columns=['close_time', 'qav', 'num_trades', 'taker_base_vol', 'taker_quote_vol', '-'], inplace=True)
     return df

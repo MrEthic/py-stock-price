@@ -21,7 +21,7 @@ def get_polygon_apikey() -> str:
 
 
 @experimental_memo
-def get_polygon_tickers() -> dict:
+def polygon_get_tickers() -> dict:
     endpoint = f"{BASE_ENDPOINT}/v3/reference/tickers?market=crypto&limit=1000{get_polygon_apikey()}"
     tickers_raw = requests.get(url=endpoint).json()
     tickers = {t.get('base_currency_symbol'): t.get('ticker') for t in tickers_raw.get('results')}
@@ -46,7 +46,7 @@ def build_polygon_endpoint(crypto_ticker, timespan):
 
 
 @experimental_memo
-def get_ticker_candles(crypto_ticker, timespan, as_df=True) -> pd.DataFrame:
+def polygon_get_ticker_candles(crypto_ticker, timespan, as_df=True) -> pd.DataFrame:
     """
     Get historical data of crypto ticker
 
