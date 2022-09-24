@@ -17,6 +17,7 @@ def hmm_modeling_chart():
         height=600
     )
 
+
 def p():
     if 'data' not in st.session_state:
         st.session_state.data = None

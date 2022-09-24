@@ -6,7 +6,9 @@ from hmmlearn.hmm import GaussianHMM
 from sklearn.model_selection import train_test_split
 
 
-class HMMPredictor(object):
+#https://towardsdatascience.com/hidden-markov-model-implemented-from-scratch-72865bda430e
+
+class HMMPredictor:
     def __init__(self, data, end_train_index,
                  n_hidden_states=4, n_latency_days=10,
                  n_steps_frac_change=20, n_steps_frac_high=10,
@@ -45,7 +47,7 @@ class HMMPredictor(object):
                                        n_steps_frac_high, n_steps_frac_low):
         frac_change_range = np.linspace(-0.15, 0.15, n_steps_frac_change)
         frac_high_range = np.linspace(0, 0.15, n_steps_frac_high)
-        frac_low_range = np.linspace(0, 0.15, n_steps_frac_low)
+        frac_low_range = np.linspace(-0.15, 0, n_steps_frac_low)
 
         self._possible_outcomes = np.array(list(itertools.product(
             frac_change_range, frac_high_range, frac_low_range)))
