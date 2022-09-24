@@ -11,4 +11,5 @@ def load_local(symbol):
         raise FileNotFoundError
 
     df.drop(columns=['close_time', 'qav', 'num_trades', 'taker_base_vol', 'taker_quote_vol', '-'], inplace=True)
+    df.rename(columns={'open_time': 'date'}, inplace=True)
     return df

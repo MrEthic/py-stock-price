@@ -5,13 +5,11 @@ import pandas as pd
 
 def candlestick_predict(df: pd.DataFrame, prediction):
 
-    df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
-
     fig = go.Figure()
 
     fig.add_trace(
         go.Candlestick(
-            x=df['open_time'],
+            x=df['date'],
             open=df['open'],
             high=df['high'],
             low=df['low'],
@@ -28,8 +26,8 @@ def candlestick_predict(df: pd.DataFrame, prediction):
 
     fig.add_trace(
         go.Scatter(
-            x=df.iloc[-len(prediction):]['open_time'],
-            y=prediction,
+            x=prediction['date'],
+            y=prediction['predicted_close'],
             name='Predicted close',
             marker=dict(
                 size=4,
